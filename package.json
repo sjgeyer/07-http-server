@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint . && jest --coverage",
+    "lint": "eslint .",
+    "start": "nodemon main.js",
+    "watchAll": "jest --coverage --watchAll"
   },
   "repository": {
     "type": "git",
