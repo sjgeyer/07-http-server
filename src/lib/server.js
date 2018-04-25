@@ -3,7 +3,8 @@
 const http = require('http');
 const cowsay = require('cowsay');
 const bodyParser = require('./body-parser');
-// const logger = require('./logger');
+const logger = require('./logger');
+const faker = require('faker');
 
 const server = module.exports = {};
 
@@ -24,23 +25,31 @@ href="/cowsay">cowsay</a></li></ul></nav></header><main>${projectDesc}</main></h
       // WORKING CORRECTLY :D
       if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/cowsay') {
         res.writeHead(200, { 'Content-Type': 'text/html' });
-        const cowsayText = cowsay.say({ text: parsedRequest.url.query.text });
+        let message;
+        if (parsedRequest.url.query.text) {
+          message = parsedRequest.url.query.text;
+        } else { message = faker.random.word(); }
+        const cowsayText = cowsay.say({ text: message });
         const cowPage = `<!DOCTYPE html><html><head><title>cowsay</title></head><body><h1>cowsay</h1><pre>${cowsayText}</pre></body></html>`;
         res.write(cowPage);
         res.end();
         return undefined;
       }
 
-      // if (parsedRequest.method === 'GET' &&)
-      // if (parsedRequest.method === 'POST' && parsedRequest.url.pathname === '/api/cowsay') {
-      //   res.writeHead(200, { 'Content-Type': 'application/json' });
-      //   res.write(JSON.stringify(parsedRequest.body));
-      //   res.end();
-      //   return undefined;
-      // }
+      // NOT WORKING :'(
+      if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/api/cowsay') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(parsedRequest.url.query));
+        res.end();
+        return undefined;
+      }
 
-      // GET -- superagent.then.catch
-      // POST --superagent.send.then.catch
+      // NOT WORKING :'(
+      if (parsedRequest.method === 'POST' && parsedRequest.url.pathname === '/api/cowsay') {
+        logger.log(logger.INFO, parsedRequest);
+
+        return undefined;
+      }
 
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('NOT FOUND');

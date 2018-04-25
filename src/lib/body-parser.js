@@ -2,6 +2,7 @@
 
 const url = require('url');
 const querystring = require('querystring');
+// const logger = require('./logger');
 
 module.exports = function bodyParser(req) {
   return new Promise((resolve, reject) => {
